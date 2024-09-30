@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    <h2 class="mb-0"><%= @expense.title %></h2>
+  </div>
+  <div class="card-body">
+    <p><strong>Amount:</strong> <%= number_to_currency(@expense.amount) %></p>
+    <p><strong>Date:</strong> <%= @expense.date %></p>
+    <p><strong>Category:</strong> <%= @expense.category&.name %></p>
+    <p><strong>Payment Method:</strong> <%= @expense.payment_method %></p>
+    <p><strong>Notes:</strong> <%= @expense.notes %></p>
+  </div>
+  <div class="card-footer">
+    <%= link_to 'Edit', edit_expense_path(@expense), class: 'btn btn-warning' %>
+    <%= link_to 'Back to Expenses', expenses_path, class: 'btn btn-secondary' %>
+  </div>
+</div>
