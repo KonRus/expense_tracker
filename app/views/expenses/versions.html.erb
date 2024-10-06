@@ -1,0 +1,24 @@
+<h2>Versions for <%= @expense.title %></h2>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Version ID</th>
+      <th>Created At</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @versions.each do |version| %>
+      <tr>
+        <td><%= version.id %></td>
+        <td><%= version.created_at %></td>
+        <td>
+          <%= link_to 'Restore', restore_version_expense_path(@expense, version.id), method: :put, class: 'btn btn-secondary' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Back to Expense', expense_path(@expense), class: 'btn btn-primary' %>

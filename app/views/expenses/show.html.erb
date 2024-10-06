@@ -8,6 +8,7 @@
     <p><strong>Category:</strong> <%= @expense.category&.name %></p>
     <p><strong>Payment Method:</strong> <%= @expense.payment_method %></p>
     <p><strong>Notes:</strong> <%= @expense.notes %></p>
+    <%= link_to 'Show Previous Versions', versions_expense_path(@expense), class: 'btn btn-primary' %>
   </div>
   <div class="card-footer">
     <%= link_to 'Edit', edit_expense_path(@expense), class: 'btn btn-warning' %>

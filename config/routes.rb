@@ -10,7 +10,13 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   devise_for :users
-  root 'expenses#index'
-  resources :expenses
+  root "expenses#index"
+  resources :expenses do
+    member do
+      get :versions
+      put "restore/:version_id", to: "expenses#restore", as: :restore_version
+    end
+  end
   resources :categories, only: %i[index new create edit update destroy]
+  post "login", to: "sessions#create"
 end

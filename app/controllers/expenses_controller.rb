@@ -1,9 +1,20 @@
 class ExpensesController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_expense, only: %i[show edit update destroy]
 
   def index
-    @expenses = Expense.page(params[:page]).per(10)
+    @expenses = current_user.expenses.page(params[:page]).per(10)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @expenses }
+    end
+  end
+
+  def show
+    respond_to do |format|
+      format.html
+      format.json { render json: @expense }
+    end
   end
 
   def new
@@ -12,31 +23,46 @@ class ExpensesController < ApplicationController
 
   def create
     @expense = current_user.expenses.build(expense_params)
-    if @expense.save
-      redirect_to expenses_path, notice: "Expense was successfully created."
-    else
-      render :new
-    end
-  end
 
-  def show
-    @expense = current_user.expenses.find(params[:id])
+    respond_to do |format|
+      if @expense.save
+        format.html { redirect_to expenses_path, notice: "Expense was successfully created." }
+        format.json { render json: @expense, status: :created }
+      else
+        format.html { render :new }
+        format.json { render json: @expense.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def edit; end
 
   def update
-    if @expense.update(expense_params)
-      redirect_to expenses_path, notice: "Expense was successfully updated."
-    else
-      render :edit
+    respond_to do |format|
+      if @expense.update(expense_params)
+        format.html { redirect_to expenses_path, notice: "Expense was successfully updated." }
+        format.json { render json: @expense }
+      else
+        format.html { render :edit }
+        format.json { render json: @expense.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
     @expense.destroy
-    redirect_to expenses_path, notice: "Expense was successfully deleted."
+
+    respond_to do |format|
+      format.html { redirect_to expenses_path, notice: "Expense was successfully deleted." }
+      format.json { head :no_content }
+    end
   end
+
+  def versions
+    @expense = current_user.expenses.find(params[:id])
+    @versions = @expense.versions
+  end
+
 
   private
 

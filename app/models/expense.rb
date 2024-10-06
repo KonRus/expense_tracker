@@ -6,4 +6,5 @@ class Expense < ApplicationRecord
   validates :date, presence: true
   validates :category_id, presence: true
   validates :payment_method, inclusion: { in: %w[Cash Credit\ Card Bank\ Transfer Other] }
+  has_paper_trail
 end

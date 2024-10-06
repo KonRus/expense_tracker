@@ -3,6 +3,11 @@ class CategoriesController < ApplicationController
 
   def index
     @categories = Category.all
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @categories }
+    end
   end
 
   def new
@@ -11,26 +16,39 @@ class CategoriesController < ApplicationController
 
   def create
     @category = Category.new(category_params)
-    if @category.save
-      redirect_to categories_path, notice: 'Category was successfully created.'
-    else
-      render :new
+
+    respond_to do |format|
+      if @category.save
+        format.html { redirect_to categories_path, notice: "Category was successfully created." }
+        format.json { render json: @category, status: :created }
+      else
+        format.html { render :new }
+        format.json { render json: @category.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   def edit; end
 
   def update
-    if @category.update(category_params)
-      redirect_to categories_path, notice: 'Category was successfully updated.'
-    else
-      render :edit
+    respond_to do |format|
+      if @category.update(category_params)
+        format.html { redirect_to categories_path, notice: "Category was successfully updated." }
+        format.json { render json: @category }
+      else
+        format.html { render :edit }
+        format.json { render json: @category.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
     @category.destroy
-    redirect_to categories_path, notice: 'Category was successfully deleted.'
+
+    respond_to do |format|
+      format.html { redirect_to categories_path, notice: "Category was successfully deleted." }
+      format.json { head :no_content }
+    end
   end
 
   private
